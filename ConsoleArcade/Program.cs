@@ -249,10 +249,9 @@ namespace ConsoleArcade
 
                     ammo -= 1;
 
-                    MovableObject missile = new MovableObject(cursor.row - 1, cursor.column, "⚡️", new TimeSpan(1_000_000));
-                    missile.directionRow = -1;
-
+                    Missile missile = new Missile(cursor.row - 1, cursor.column, "⚡️", new TimeSpan(1_000_000));
                     movableObjects.Add(missile);
+                    missile.Launch();
 
                 }
 
