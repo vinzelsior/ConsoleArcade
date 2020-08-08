@@ -11,7 +11,7 @@ namespace ConsoleArcade
         public static int maxColumns = 20;
 
         public static int score = 0;
-        public static int ammo = 0;
+        public static int ammo = 5;
 
         public static Screen.Detail currentDetail;
 
@@ -47,8 +47,6 @@ namespace ConsoleArcade
 
         static void DrawScore()
         {
-
-
 
             string scr = $"Score: {score}";
 
@@ -101,9 +99,19 @@ namespace ConsoleArcade
 
             ConsoleKey key = Console.ReadKey().Key;
 
-            int index = int.Parse(key.ToString().Replace("D",""));
+            try {
 
-            currentDetail = screen.screens[index];
+                int index = int.Parse(key.ToString().Replace("D", ""));
+
+                currentDetail = screen.screens[index];
+            } catch 
+            {
+                currentDetail = screen.screens[0];
+            }
+
+            
+
+            
 
             Console.Clear();
 
