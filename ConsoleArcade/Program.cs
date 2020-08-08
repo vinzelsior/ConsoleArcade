@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Media;
 using System.Threading;
 
 namespace ConsoleArcade
 {
     class Program
     {
-
         public static int maxRows = 15;
         public static int maxColumns = 20;
 
         public static int score = 0;
-        public static int ammo = 5;
+        public static int ammo = 10;
 
         public static Screen.Detail currentDetail;
 
@@ -47,6 +47,7 @@ namespace ConsoleArcade
 
         static void DrawScore()
         {
+
 
             string scr = $"Score: {score}";
 
@@ -277,11 +278,9 @@ namespace ConsoleArcade
 
                     ammo -= 1;
 
-                    MovableObject missile = new MovableObject(cursor.row - 1, cursor.column, currentDetail.projectile, new TimeSpan(1_000_000));
-
-                    missile.directionRow = -1;
-
+                    Missile missile = new Missile(cursor.row - 1, cursor.column, "⚡️", new TimeSpan(1_000_000));
                     movableObjects.Add(missile);
+                    missile.Launch();
 
                 }
 

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Media;
+
+
 namespace ConsoleArcade
 {
     public class MovableObject
@@ -26,6 +30,26 @@ namespace ConsoleArcade
             this.column = column;
             this.symbol = symbol;
 
+        }
+    }
+
+   
+
+    public class Missile : MovableObject
+    {
+
+        public Missile(int row, int column, string symbol, TimeSpan updateInterval) : base(row, column, symbol, updateInterval)
+        {
+        }
+
+        public void Launch(int directionRow = -1, int directionColumn = 0)
+        {
+            this.directionRow = directionRow;
+            this.directionColumn = directionColumn;
+            using (SoundPlayer saxPlayer = new SoundPlayer())
+            {
+                saxPlayer.Play();
+            }
         }
     }
 }
