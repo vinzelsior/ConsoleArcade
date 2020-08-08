@@ -7,12 +7,13 @@ namespace ConsoleArcade
     class Program
     {
 
-
         public static int maxRows = 15;
         public static int maxColumns = 20;
 
         public static int score = 0;
         public static int ammo = 0;
+
+        public static Screen.Detail currentDetail;
 
         static void DrawSeveralInLine(List<MovableObject> objects, List<VanityObject> vanities)
         {
@@ -68,7 +69,7 @@ namespace ConsoleArcade
         static void DrawAmmo()
         {
 
-            string amm = $"Nazaars Wisdom: {ammo}";
+            string amm = $"{currentDetail.pwrUpName}: {ammo}";
 
             Console.WriteLine(amm);
             Console.WriteLine();
@@ -76,21 +77,39 @@ namespace ConsoleArcade
 
         static void Main(string[] args)
         {
+
+            Screen screen = new Screen();
+
+
+
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("Console Arcade - Project by Cedric Zwahlen");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("");
             Console.WriteLine("Press '⌘+⇧+1' to resize the window.");
             Console.WriteLine("");
-            Console.WriteLine("Any key to start.");
+            Console.WriteLine("Please Choose a screen");
+
+            int cntr = 0;
+
+            foreach (Screen.Detail s in screen.screens)
+            {
+                Console.WriteLine("");
+                Console.WriteLine($"{cntr} : {s.name} - {s.cursor}");
+                cntr++;
+            }
 
             ConsoleKey key = Console.ReadKey().Key;
+
+            int index = int.Parse(key.ToString().Replace("D",""));
+
+            currentDetail = screen.screens[index];
 
             Console.Clear();
 
             // One million ticks = 1 sec / ticks not used in cursor
 
-            MovableObject cursor = new MovableObject(maxRows, maxRows / 2, "🍤", new TimeSpan(50_000_000));
+            MovableObject cursor = new MovableObject(maxRows, maxRows / 2, currentDetail.cursor, new TimeSpan(50_000_000));
 
             cursor.lastUpdate = DateTime.Now;
 
@@ -175,7 +194,7 @@ namespace ConsoleArcade
                             movableObjects[i].remove = true;
                             score++;
 
-                            vanityObjects.Add(new VanityObject(mvblObj.row, mvblObj.column, "💥", new TimeSpan(2_000_000)));
+                            vanityObjects.Add(new VanityObject(mvblObj.row, mvblObj.column, currentDetail.explosion, new TimeSpan(2_000_000)));
                         }
                     }
 
@@ -250,7 +269,7 @@ namespace ConsoleArcade
 
                     ammo -= 1;
 
-                    MovableObject missile = new MovableObject(cursor.row - 1, cursor.column, "⚡️", new TimeSpan(1_000_000));
+                    MovableObject missile = new MovableObject(cursor.row - 1, cursor.column, currentDetail.projectile, new TimeSpan(1_000_000));
 
                     missile.directionRow = -1;
 
