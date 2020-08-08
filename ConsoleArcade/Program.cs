@@ -7,13 +7,14 @@ namespace ConsoleArcade
     class Program
     {
 
+
         public static int maxRows = 15;
-        public static int maxColumns = 30;
+        public static int maxColumns = 20;
 
         public static int score = 0;
         public static int ammo = 0;
 
-        static void DrawSeveralInLine(List<MovableObject> objects)
+        static void DrawSeveralInLine(List<MovableObject> objects, List<VanityObject> vanities)
         {
 
             string newLine = "";
@@ -22,9 +23,17 @@ namespace ConsoleArcade
             {
                 MovableObject obj = objects.Find(o => o.column == i);
 
+                VanityObject vans = vanities.Find(o => o.column == i);
+
                 if (obj != null)
                 {
                     newLine += obj.symbol;
+                    continue;
+                }
+                if (vans != null)
+                {
+                    newLine += vans.symbol;
+                    continue;
                 }
                 else
                 {
@@ -37,6 +46,8 @@ namespace ConsoleArcade
 
         static void DrawScore()
         {
+
+
 
             string scr = $"Score: {score}";
 
@@ -57,7 +68,7 @@ namespace ConsoleArcade
         static void DrawAmmo()
         {
 
-            string amm = $"Eldritch Blast Count: {ammo}";
+            string amm = $"Nazaars Wisdom: {ammo}";
 
             Console.WriteLine(amm);
             Console.WriteLine();
@@ -84,6 +95,8 @@ namespace ConsoleArcade
             cursor.lastUpdate = DateTime.Now;
 
             List<MovableObject> movableObjects = new List<MovableObject>();
+
+            List<VanityObject> vanityObjects = new List<VanityObject>();
 
             bool gameOver = false;
 
@@ -114,6 +127,17 @@ namespace ConsoleArcade
 
                         }
                     }
+
+                    foreach (VanityObject obj in vanityObjects)
+                    {
+                        if (DateTime.Now > obj.spawnedAt + obj.lifeTime)
+                        {
+                            obj.remove = true;
+                        }
+                    }
+
+
+
 
                     // mark objects to be removed
                     for (int i = 0; i < movableObjects.Count; i++)
@@ -150,16 +174,25 @@ namespace ConsoleArcade
                             mvblObj.remove = true;
                             movableObjects[i].remove = true;
                             score++;
+
+                            vanityObjects.Add(new VanityObject(mvblObj.row, mvblObj.column, "💥", new TimeSpan(2_000_000)));
                         }
                     }
 
                     // remove all marked items
 
-                    List<MovableObject> ToRemove = movableObjects.FindAll(m => m.remove == true);
+                    List<MovableObject> ToRemoveMov = movableObjects.FindAll(m => m.remove == true);
 
-                    foreach (MovableObject obj in ToRemove)
+                    foreach (MovableObject obj in ToRemoveMov)
                     {
                         movableObjects.Remove(obj);
+                    }
+
+                    List<VanityObject> ToRemoveVan = vanityObjects.FindAll(m => m.remove == true);
+
+                    foreach (VanityObject obj in ToRemoveVan)
+                    {
+                        vanityObjects.Remove(obj);
                     }
 
                     DrawAmmo();
@@ -171,14 +204,17 @@ namespace ConsoleArcade
 
                         List<MovableObject> objectsInLine = movableObjects.FindAll(m => m.row == i);
 
+                        List<VanityObject> vanitiesInLine = vanityObjects.FindAll(m => m.row == i);
+
                         if (i == cursor.row)
                         {
                             objectsInLine.Add(cursor);
-
                         }
+                        
+                        DrawSeveralInLine(objectsInLine, vanitiesInLine);
+                        
 
-                        DrawSeveralInLine(objectsInLine);
-
+                     
                     }
 
                     DrawScore();

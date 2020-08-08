@@ -16,16 +16,12 @@ namespace ConsoleArcade
         public static int totalSpawned = 0;
         public static int difficulty = 0;
 
-        private static int tolerance = 500_000;
+        //private static int tolerance = 0;
         private static int dwnTme = 15_000_000;
 
         private static List<string> symbols = new List<string>()
         {"🍎","🥑","🍅","🥕","🍏","🍍","🍇","🍓"};
 
-        public Spawner()
-        {
-
-        }
 
         public static void SpawnAutomatically(List<MovableObject> into)
         {
@@ -33,13 +29,15 @@ namespace ConsoleArcade
             {
                 lastSpawn = DateTime.Now;
 
-                if (dwnTme - tolerance - downTimeModifier - (difficulty * 200_000) <= 0)
+                if (dwnTme - downTimeModifier - (difficulty * 200_000) <= 0)
                 {
-                    downTime = new TimeSpan(rand.Next(200_000, 1_500_000));
+                    //downTime = new TimeSpan(rand.Next(200_000, 1_500_000));
+                    downTime = new TimeSpan(1_000_000);
                 }
                 else
                 {
-                    downTime = new TimeSpan(rand.Next(dwnTme - tolerance - downTimeModifier - (difficulty * 200_000), dwnTme + tolerance - downTimeModifier - (difficulty * 200_000)));
+                    //downTime = new TimeSpan(rand.Next(dwnTme - tolerance - downTimeModifier - (difficulty * 200_000), dwnTme + tolerance - downTimeModifier - (difficulty * 200_000)));
+                    downTime = new TimeSpan(dwnTme - downTimeModifier);
                 }
 
                 // spawn rare
@@ -63,7 +61,7 @@ namespace ConsoleArcade
                 if ((int)multiplier * 1 > difficulty)
                 {
                     difficulty = (int)multiplier * 1 + (int)( Math.Sqrt((Program.maxRows * Program.maxRows) + (Program.maxColumns * Program.maxColumns)) / 10 );
-                    downTimeModifier = downTimeModifier + 3_000_000;
+                    downTimeModifier = downTimeModifier + 2_000_000;
                 }
             }
         }
