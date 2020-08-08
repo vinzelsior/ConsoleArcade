@@ -19,8 +19,7 @@ namespace ConsoleArcade
         //private static int tolerance = 0;
         private static int dwnTme = 15_000_000;
 
-        private static List<string> symbols = new List<string>()
-        {"🍎","🥑","🍅","🥕","🍏","🍍","🍇","🍓"};
+        private static List<string> symbols = Program.currentDetail.foes;
 
 
         public static void SpawnAutomatically(List<MovableObject> into)
@@ -32,7 +31,7 @@ namespace ConsoleArcade
                 if (dwnTme - downTimeModifier - (difficulty * 200_000) <= 0)
                 {
                     //downTime = new TimeSpan(rand.Next(200_000, 1_500_000));
-                    downTime = new TimeSpan(1_000_000);
+                    downTime = new TimeSpan(10_000_000);
                 }
                 else
                 {
@@ -61,7 +60,7 @@ namespace ConsoleArcade
                 if ((int)multiplier * 1 > difficulty)
                 {
                     difficulty = (int)multiplier * 1 + (int)( Math.Sqrt((Program.maxRows * Program.maxRows) + (Program.maxColumns * Program.maxColumns)) / 10 );
-                    downTimeModifier = downTimeModifier + 2_000_000;
+                    downTimeModifier = downTimeModifier + 6_000_000;
                 }
             }
         }
@@ -79,7 +78,7 @@ namespace ConsoleArcade
         private static MovableObject spawnTreat()
         {
 
-            MovableObject treat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), "🧿", new TimeSpan(3_500_000 - (difficulty * 200_000)));
+            MovableObject treat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), Program.currentDetail.powerUp, new TimeSpan(3_500_000 - (difficulty * 200_000)));
 
             treat.directionRow = 1;
             treat.isTreat = true;
