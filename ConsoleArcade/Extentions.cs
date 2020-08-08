@@ -4,13 +4,13 @@ using System.Text;
 
 namespace ConsoleArcade
 {
-    static class Extentions
+    public static class Extentions
     {
-        static Random random;
+        public static Random random = new Random();
 
-        static T PickRandom<T>(this List<T> list)
+        public static T PickRandom<T>(this List<T> list)
         {
-            return list[random.Next(0, list.Count - 1)];
+            return list[random.Next(0, list.Count)];
         }
     }
 }

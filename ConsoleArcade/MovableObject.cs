@@ -46,9 +46,13 @@ namespace ConsoleArcade
         {
             this.directionRow = directionRow;
             this.directionColumn = directionColumn;
-            using (SoundPlayer saxPlayer = new SoundPlayer())
+
+            if(Program.currentDetail.LaunchSound != null)
             {
-                saxPlayer.Play();
+                using (SoundPlayer saxPlayer = new SoundPlayer(Program.currentDetail.LaunchSound.PickRandom())) 
+                {
+                    saxPlayer?.Play();
+                }
             }
         }
     }
