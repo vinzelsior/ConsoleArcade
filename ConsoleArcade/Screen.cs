@@ -51,10 +51,10 @@ namespace ConsoleArcade
             screens.AddRange(new List<Detail>() { standard, alain } );
         }
 
+        // could be used to add custom ones with JSON
         public void resolve()
         {
 
         }
-
     }
 }

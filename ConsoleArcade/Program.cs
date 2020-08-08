@@ -49,7 +49,6 @@ namespace ConsoleArcade
         {
 
 
-
             string scr = $"Score: {score}";
 
             string buffer = "";
@@ -101,9 +100,19 @@ namespace ConsoleArcade
 
             ConsoleKey key = Console.ReadKey().Key;
 
-            int index = int.Parse(key.ToString().Replace("D",""));
+            try {
 
-            currentDetail = screen.screens[index];
+                int index = int.Parse(key.ToString().Replace("D", ""));
+
+                currentDetail = screen.screens[index];
+            } catch 
+            {
+                currentDetail = screen.screens[0];
+            }
+
+            
+
+            
 
             Console.Clear();
 
