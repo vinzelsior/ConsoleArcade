@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Media;
 using System.Threading;
 
@@ -7,11 +8,11 @@ namespace ConsoleArcade
 {
     class Program
     {
-        public static int maxRows = 15;
-        public static int maxColumns = 20;
+        public static int maxRows = 50;
+        public static int maxColumns = 200;
 
         public static int score = 0;
-        public static int ammo = 10;
+        public static int ammo = 20;
 
         public static Screen.Detail currentDetail;
 
@@ -76,7 +77,6 @@ namespace ConsoleArcade
 
         static void Main(string[] args)
         {
-
             Screen screen = new Screen();
 
 
@@ -184,7 +184,7 @@ namespace ConsoleArcade
 
                             if (collisionWithCursor.isTreat)
                             {
-                                ammo += 5;
+                                ammo += 10;
                                 collisionWithCursor.remove = true;
                                 break;
                             }
@@ -278,7 +278,7 @@ namespace ConsoleArcade
 
                     ammo -= 1;
 
-                    Missile missile = new Missile(cursor.row - 1, cursor.column, "⚡️", new TimeSpan(1_000_000));
+                    Missile missile = new Missile(cursor.row - 1, cursor.column, currentDetail.projectile, new TimeSpan(1_000_000));
                     movableObjects.Add(missile);
                     missile.Launch();
 
