@@ -37,15 +37,39 @@ namespace ConsoleArcade
             standard.textColor = ConsoleColor.Black;
             standard.backgroundColor = ConsoleColor.White;
 
-            Detail nature = new Detail();
-            nature.foes = new List<string>()
-            {"","","","","","","",""};
-            nature.cursor = "";
-            nature.explosion = "";
-            nature.powerUp = "";
-            nature.projectile = "";
-            nature.name = "";
-            nature.pwrUpName = "";
+            Detail nature = new Detail()
+            {
+                foes = new List<string>()
+                {
+                    "🍀", "🌿", "🍃", "🍂", "🌾", "🌱", "🍁", "🌺","🌷","🌸","🌹","🌻","🌼"
+                },
+
+                cursor = "🐿",
+                powerUp = "🦄",
+                explosion = "🟤",
+                projectile = "🥜",
+                name = "Nature? Why Yes!",
+                pwrUpName = "NUTS",
+                backgroundColor = ConsoleColor.Black,
+                textColor = ConsoleColor.DarkGreen,
+            };
+
+            Detail universe = new Detail()
+            {
+                foes = new List<string>()
+                {
+                    "🌝", "🌛", "🌜", "🌚", "🌕", "🌖", "🌗", "🌘","🌑","🌒","🌓","🌔","🌙","🌎","🌍","🌏","🪐"
+                },
+
+                cursor = "🌞",
+                powerUp = "⭐️",
+                explosion = "🌟",
+                projectile = "✨",
+                name = "Binary Sunset, How The Time Flies...",
+                pwrUpName = "STARZ",
+                backgroundColor = ConsoleColor.Black,
+                textColor = ConsoleColor.Yellow,
+            };
 
 
             Detail alain = new Detail();
@@ -84,10 +108,12 @@ namespace ConsoleArcade
                 projectile = "!",
                 name = "Ascii for Windows",
                 pwrUpName = "Crashes",
-                LaunchSound = alain.LaunchSound
+                LaunchSound = alain.LaunchSound,
+                backgroundColor = ConsoleColor.Black,
+                textColor = ConsoleColor.White,
             };
 
-            screens.AddRange(new List<Detail>() { standard, alain, ascii } );
+            screens.AddRange(new List<Detail>() { standard, alain, ascii, nature, universe } );
         }
 
         // could be used to add custom ones with JSON

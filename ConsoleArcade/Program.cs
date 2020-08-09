@@ -8,8 +8,8 @@ namespace ConsoleArcade
 {
     class Program
     {
-        public static int maxRows = 50;
-        public static int maxColumns = 200;
+        public static int maxRows = 30;
+        public static int maxColumns = 30;
 
         public static int score = 0;
         public static int ammo = 20;
