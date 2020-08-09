@@ -10,10 +10,10 @@ namespace ConsoleArcade
         private static TimeSpan downTime = new TimeSpan(0);
         private static DateTime lastSpawn = DateTime.Now;
 
-        private static int totalSpawned = 0;
-        private static int difficulty = 0;
-
         public static int level = 1;
+
+        private static TimeSpan triggerLevelUp = new TimeSpan(200_000_000);
+        private static DateTime lastLevelUp = DateTime.Now;
 
         public static List<string> symbols = Program.currentDetail.foes;
 
@@ -23,7 +23,7 @@ namespace ConsoleArcade
             {
                 lastSpawn = DateTime.Now;
 
-                int val = (20_000_000 - (level * 1_000_000) - (difficulty * 200_000)) / (int)(Program.maxColumns / 5);
+                int val = (20_000_000 - (level * 1_000_000)) / (int)(Program.maxColumns / 5);
 
                 downTime = new TimeSpan(val);
 
@@ -42,26 +42,13 @@ namespace ConsoleArcade
                         // easy to confuse
                         into.Add(spawnThreat());
                     }
-
-                    totalSpawned += 1;
                 }
 
-
-
-                int rowModifier = (int)(Program.maxColumns / 2);
-
-                if ((int)(totalSpawned / rowModifier) * 1 > difficulty)
+                if (DateTime.Now > lastLevelUp + triggerLevelUp)
                 {
-                    difficulty = (int)(totalSpawned / rowModifier);
-                }
-
-                
-                if ((int)(difficulty / 5) > level)
-                {
-                    difficulty = 0;
                     level++;
+                    lastLevelUp = DateTime.Now;
                 }
-
             }
         }
 
@@ -86,10 +73,10 @@ namespace ConsoleArcade
 
         public static void reset()
         {
-            totalSpawned = 0;
-            difficulty = 0;
-
+            
             level = 1;
+
+            lastLevelUp = DateTime.Now;
         }
     }
 }

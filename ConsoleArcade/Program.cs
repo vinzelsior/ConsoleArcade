@@ -26,14 +26,14 @@ namespace ConsoleArcade
         public static int maxColumns = 40;
 
         public static int score = 0;
-        public static int ammo = 10;
+        public static int ammo = 5;
 
         public static Screen.Detail currentDetail;
         public static string filler;
 
         public static int chargeIncrements = 0;
         public static int maxCharges = maxColumns;
-        public static int maxChargeTime = 4_000_000;
+        public static int maxChargeTime = 4_500_000;
 
         static void DrawSeveralInLine(List<MovableObject> objects, List<VanityObject> vanities)
         {
@@ -63,6 +63,26 @@ namespace ConsoleArcade
             }
 
             Console.WriteLine(newLine);
+        }
+
+        static List<VanityObject> GenerateVanitiesFromString(string text)
+        {
+
+            List<VanityObject> vs = new List<VanityObject>();
+
+            int clm = (maxColumns - text.Length) / 2;
+            int rw = maxRows / 2;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                VanityObject v = new VanityObject(rw, clm, text[i].ToString(), new TimeSpan(20_000_000));
+
+                vs.Add(v);
+
+                clm++;
+            }
+
+            return vs;
         }
 
         static void DrawScore()
@@ -177,9 +197,17 @@ namespace ConsoleArcade
 
             bool gameOver = false;
 
+            bool started = false;
             
             do
             {
+
+                if (!started)
+                {
+                    started = true;
+                    vanityObjects.AddRange(GenerateVanitiesFromString("Start!"));
+                }
+
                 // updates the game
 
                 while (Console.KeyAvailable == false && gameOver == false)
@@ -229,7 +257,7 @@ namespace ConsoleArcade
 
                             if (collisionWithCursor.isTreat)
                             {
-                                ammo += 10;
+                                ammo += 5;
                                 collisionWithCursor.remove = true;
                                 break;
                             }
@@ -246,8 +274,12 @@ namespace ConsoleArcade
                         {
                             mvblObj.remove = true;
                             movableObjects[i].remove = true;
-                            score++;
 
+                            if (mvblObj is Missile || movableObjects[i] is Missile)
+                            {
+                                score++;
+                            }
+                            
                             vanityObjects.Add(new VanityObject(mvblObj.row, mvblObj.column, currentDetail.explosion, new TimeSpan(2_000_000)));
                         }
                     }
@@ -258,14 +290,6 @@ namespace ConsoleArcade
                     foreach (MovableObject obj in ToRemoveMov)
                     {
                         movableObjects.Remove(obj);
-                    }
-
-                    foreach (VanityObject obj in vanityObjects)
-                    {
-                        if (DateTime.Now > obj.spawnedAt + obj.lifeTime)
-                        {
-                            obj.remove = true;
-                        }
                     }
 
                     List<VanityObject> ToRemoveVan = vanityObjects.FindAll(m => m.remove == true);
@@ -375,6 +399,7 @@ namespace ConsoleArcade
                 if (key == ConsoleKey.V && chargeReady)
                 {
 
+
                     chargeReady = false;
                     chargeIncrements = 0;
 
@@ -401,7 +426,6 @@ namespace ConsoleArcade
 
                     piece7.Launch(0, 1);
                     piece8.Launch(0, -1);
-
                 }
 
 
@@ -418,7 +442,7 @@ namespace ConsoleArcade
 
             Spawner.reset();
 
-            ammo = 10;
+            ammo = 5;
             score = 0;
 
             movableObjects = new List<MovableObject>();

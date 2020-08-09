@@ -31,7 +31,7 @@ namespace ConsoleArcade
             {
                 foes = new List<string>()
                 {
-                    "🍎", "🥑", "🍅", "🥕", "🍏", "🍍", "🍇", "🍓"
+                    "🍎", "🥑", "🍅", "🥕", "🍏", "🍍", "🍇", "🍓", "🥭"
                 },
 
                 cursor = "🍤",
@@ -43,7 +43,7 @@ namespace ConsoleArcade
                 textColor = ConsoleColor.Black,
                 backgroundColor = ConsoleColor.White,
                 filler = "  ",
-                charge = "🍭"
+                charge = " 🍭 "
             };
 
             Detail nature = new Detail()
@@ -81,7 +81,7 @@ namespace ConsoleArcade
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.Yellow,
                 filler = "⬛️",
-                charge = "🌠"
+                charge = " 🌠 "
             };
 
 
@@ -153,7 +153,25 @@ namespace ConsoleArcade
                 charge = " 🐱 ",
             };
 
-            screens.AddRange(new List<Detail>() { standard, alain, ascii, cats, nature, universe } );
+            Detail shapes = new Detail()
+            {
+                foes = new List<string>()
+                {
+                    "🟥", "🟧", "🟨", "🟩", "🟦", "🟪"
+                },
+                cursor = "↔️",
+                projectile = "🔺",
+                explosion = "🌀",
+                powerUp = "♦️",
+                name = "Shapes and More",
+                pwrUpName = "Cölor? No More!",
+                backgroundColor = ConsoleColor.White,
+                textColor = ConsoleColor.Gray,
+                filler = "  ",
+                charge = " 🔷 ",
+            };
+
+            screens.AddRange(new List<Detail>() { standard, alain, ascii, cats, nature, universe, shapes } );
         }
 
         // could be used to add custom ones with JSON
