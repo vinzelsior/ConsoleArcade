@@ -80,7 +80,6 @@ namespace ConsoleArcade
             Screen screen = new Screen();
 
 
-
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("Console Arcade - Project by Cedric Zwahlen");
             Console.WriteLine("------------------------------------------");
@@ -94,7 +93,7 @@ namespace ConsoleArcade
             foreach (Screen.Detail s in screen.screens)
             {
                 Console.WriteLine("");
-                Console.WriteLine($"{cntr} : {s.name} - {s.cursor}");
+                Console.WriteLine($"{cntr}: {s.name} - {s.cursor}");
                 cntr++;
             }
 

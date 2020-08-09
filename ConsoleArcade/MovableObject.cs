@@ -49,10 +49,16 @@ namespace ConsoleArcade
 
             if(Program.currentDetail.LaunchSound != null)
             {
-                using (SoundPlayer saxPlayer = new SoundPlayer(Program.currentDetail.LaunchSound.PickRandom())) 
+                try
                 {
-                    saxPlayer?.Play();
+
+                    using (SoundPlayer saxPlayer = new SoundPlayer(Program.currentDetail.LaunchSound.PickRandom()))
+                    {
+                        saxPlayer?.Play();
+                    }
                 }
+                catch { }
+                
             }
         }
     }

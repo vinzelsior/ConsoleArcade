@@ -11,13 +11,15 @@ namespace ConsoleArcade
         private static DateTime lastSpawn = DateTime.Now;
 
         private static int downTimeModifier = 0;
-        private static TimeSpan speedModifier = new TimeSpan(0);
+        private static int speedModifier = 0;
 
         public static int totalSpawned = 0;
         public static int difficulty = 0;
 
         //private static int tolerance = 0;
         private static int dwnTme = 15_000_000;
+
+        private static bool speedModUpdated = false; 
 
         private static List<string> symbols = Program.currentDetail.foes;
 
@@ -31,10 +33,19 @@ namespace ConsoleArcade
                 if (dwnTme - downTimeModifier - (difficulty * 200_000) <= 0)
                 {
                     //downTime = new TimeSpan(rand.Next(200_000, 1_500_000));
-                    downTime = new TimeSpan(10_000_000);
+                    difficulty = 0;
+                    totalSpawned = 0;
+                    if (!speedModUpdated)
+                    {
+                        speedModUpdated = true;
+                        speedModifier++;
+                    }
+                    
+
                 }
                 else
                 {
+                    speedModUpdated = false;
                     //downTime = new TimeSpan(rand.Next(dwnTme - tolerance - downTimeModifier - (difficulty * 200_000), dwnTme + tolerance - downTimeModifier - (difficulty * 200_000)));
                     downTime = new TimeSpan(dwnTme - downTimeModifier);
                 }
@@ -68,7 +79,7 @@ namespace ConsoleArcade
         private static MovableObject spawnThreat()
         {
 
-            MovableObject threat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), symbols[rand.Next(symbols.Count)], new TimeSpan(3_500_000 - (difficulty * 200_000)));
+            MovableObject threat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), symbols[rand.Next(symbols.Count)], new TimeSpan(3_500_000 - (speedModifier * 300_000)));
 
             threat.directionRow = 1;
 
@@ -78,7 +89,7 @@ namespace ConsoleArcade
         private static MovableObject spawnTreat()
         {
 
-            MovableObject treat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), Program.currentDetail.powerUp, new TimeSpan(3_500_000 - (difficulty * 200_000)));
+            MovableObject treat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), Program.currentDetail.powerUp, new TimeSpan(3_500_000 - (speedModifier * 300_000)));
 
             treat.directionRow = 1;
             treat.isTreat = true;
