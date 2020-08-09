@@ -109,7 +109,9 @@ namespace ConsoleArcade
                 currentDetail = screen.screens[0];
             }
 
-            
+            Console.BackgroundColor = currentDetail.backgroundColor;
+            Console.ForegroundColor = currentDetail.textColor;
+
 
             
 
