@@ -23,13 +23,17 @@ namespace ConsoleArcade
         // row = line
         public static int maxRows = 10;
         // the spaces
-        public static int maxColumns = 20;
+        public static int maxColumns = 40;
 
         public static int score = 0;
         public static int ammo = 10;
 
         public static Screen.Detail currentDetail;
         public static string filler;
+
+        public static int chargeIncrements = 0;
+        public static int maxCharges = maxColumns;
+        public static int maxChargeTime = 4_000_000;
 
         static void DrawSeveralInLine(List<MovableObject> objects, List<VanityObject> vanities)
         {
@@ -64,8 +68,7 @@ namespace ConsoleArcade
         static void DrawScore()
         {
 
-
-            string scr = $"Score: {score}";
+            string scr = $"Score: {score}\t\tLevel: {Spawner.level}";
 
             string buffer = "";
 
@@ -90,12 +93,39 @@ namespace ConsoleArcade
             Console.WriteLine();
         }
 
+        static void DrawCharge()
+        {
+            string chrg = "";
+
+            int incrementMod = chargeIncrements;
+
+            if (currentDetail.charge.Length > 2)
+            {
+                incrementMod = incrementMod / 2;
+            }
+            
+            for (int i = 0; i < incrementMod; i++)
+            {
+                chrg += currentDetail.charge;
+            }
+            Console.WriteLine("");
+            Console.WriteLine(chrg);
+        }
+
         static void Main(string[] args)
         {
 
-            start:
+        // from goto
+        start:
 
+            TimeSpan chargeTime = new TimeSpan(maxCharges/maxChargeTime);
+            DateTime chargeBegan = DateTime.Now;
+
+            bool chargeReady = false;
+            
             Screen screen = new Screen();
+
+            bool chargePreparing = false;
 
 
             Console.WriteLine("------------------------------------------");
@@ -111,7 +141,7 @@ namespace ConsoleArcade
             foreach (Screen.Detail s in screen.screens)
             {
                 Console.WriteLine("");
-                Console.WriteLine($"{cntr}: {s.name} - {s.cursor}");
+                Console.WriteLine($"{cntr}:\t{s.name}  {s.cursor}");
                 cntr++;
             }
 
@@ -154,7 +184,6 @@ namespace ConsoleArcade
 
                 while (Console.KeyAvailable == false && gameOver == false)
                 {
-
                     Spawner.SpawnAutomatically(movableObjects);
 
                     Console.Clear();
@@ -231,20 +260,19 @@ namespace ConsoleArcade
                         movableObjects.Remove(obj);
                     }
 
-                    List<VanityObject> ToRemoveVan = vanityObjects.FindAll(m => m.remove == true);
-
-                    foreach (VanityObject obj in ToRemoveVan)
-                    {
-                        vanityObjects.Remove(obj);
-                    }
-
-
                     foreach (VanityObject obj in vanityObjects)
                     {
                         if (DateTime.Now > obj.spawnedAt + obj.lifeTime)
                         {
                             obj.remove = true;
                         }
+                    }
+
+                    List<VanityObject> ToRemoveVan = vanityObjects.FindAll(m => m.remove == true);
+
+                    foreach (VanityObject obj in ToRemoveVan)
+                    {
+                        vanityObjects.Remove(obj);
                     }
 
                     // updates the position of non-missiles after
@@ -267,8 +295,6 @@ namespace ConsoleArcade
                     // draws the lines again
                     for (int i = 0; i <= maxRows; i++)
                     {
-
-
                         List<MovableObject> objectsInLine = movableObjects.FindAll(m => m.row == i);
 
                         List<VanityObject> vanitiesInLine = vanityObjects.FindAll(m => m.row == i);
@@ -281,6 +307,7 @@ namespace ConsoleArcade
                         DrawSeveralInLine(objectsInLine, vanitiesInLine);
                     }
 
+                    DrawCharge();
                     DrawScore();
 
                     Thread.Sleep(10);
@@ -294,30 +321,91 @@ namespace ConsoleArcade
                 // reacts to user input
                 key = Console.ReadKey().Key;
 
+                if (key == ConsoleKey.UpArrow)
+                {
+                    // charge Vince's Grace (secret?)
+                    if (!chargePreparing)
+                    {
+                        chargeBegan = DateTime.Now;
+                        chargePreparing = true;
+                    }
+
+                    if (DateTime.Now > chargeBegan + chargeTime)
+                    {
+                        chargeIncrements++;
+                        chargePreparing = false;
+                        chargeBegan = DateTime.Now + new TimeSpan(1_000_000_000);
+                    }
+
+                    if (chargeIncrements >= maxCharges)
+                    {
+                        chargeReady = true;
+                        chargePreparing = false;
+                        chargeIncrements = maxCharges;
+                    }
+                }
+                else
+                {
+                    chargePreparing = false;
+                    chargeBegan = DateTime.Now + new TimeSpan(1_000_000_000);
+                    chargeIncrements = chargeReady ? chargeIncrements : 0;
+                }
+
 
                 if (key == ConsoleKey.RightArrow)
                 {
                     cursor.column = cursor.column >= maxColumns - 1 ? maxColumns - 1 : cursor.column + 1;
-                   
                 }
 
                 if (key == ConsoleKey.LeftArrow)
                 {
-
                     cursor.column = cursor.column <= 0 ? 0 : cursor.column - 1;
-
                 }
 
                 if (key == ConsoleKey.Spacebar && ammo > 0)
                 {
+                        ammo -= 1;
 
-                    ammo -= 1;
+                        Missile missile = new Missile(cursor.row - 1, cursor.column, currentDetail.projectile, new TimeSpan(1_000_000));
+                        movableObjects.Add(missile);
+                        missile.Launch();
+                    
+                }
 
-                    Missile missile = new Missile(cursor.row - 1, cursor.column, currentDetail.projectile, new TimeSpan(1_000_000));
-                    movableObjects.Add(missile);
-                    missile.Launch();
+                if (key == ConsoleKey.V && chargeReady)
+                {
+
+                    chargeReady = false;
+                    chargeIncrements = 0;
+
+                    Missile piece1 = new Missile(cursor.row - 1, cursor.column, currentDetail.projectile, new TimeSpan(1_000_000));
+                    Missile piece2 = new Missile(cursor.row - 1, cursor.column + 1, currentDetail.projectile, new TimeSpan(1_000_000));
+                    Missile piece3 = new Missile(cursor.row - 1, cursor.column - 1, currentDetail.projectile, new TimeSpan(1_000_000));
+
+                    Missile piece4 = new Missile(cursor.row - 2, cursor.column, currentDetail.projectile, new TimeSpan(800_000));
+                    Missile piece5 = new Missile(cursor.row - 1, cursor.column + 2, currentDetail.projectile, new TimeSpan(1_200_000));
+                    Missile piece6 = new Missile(cursor.row - 1, cursor.column - 2, currentDetail.projectile, new TimeSpan(1_200_000));
+
+                    Missile piece7 = new Missile(cursor.row - 1, cursor.column + 3, currentDetail.projectile, new TimeSpan(1_400_000));
+                    Missile piece8 = new Missile(cursor.row - 1, cursor.column - 3, currentDetail.projectile, new TimeSpan(1_400_000));
+
+                    movableObjects.AddRange(new List<MovableObject>() { piece1, piece2, piece3, piece4, piece5, piece6, piece8, piece7 });
+
+                    piece1.Launch();
+                    piece2.Launch();
+                    piece3.Launch();
+
+                    piece4.Launch();
+                    piece5.Launch(-1, 1);
+                    piece6.Launch(-1, -1);
+
+                    piece7.Launch(0, 1);
+                    piece8.Launch(0, -1);
 
                 }
+
+
+
             } while (key != ConsoleKey.Escape);
 
             Console.Clear();
@@ -329,6 +417,9 @@ namespace ConsoleArcade
             Console.ReadKey();
 
             Spawner.reset();
+
+            ammo = 10;
+            score = 0;
 
             movableObjects = new List<MovableObject>();
 

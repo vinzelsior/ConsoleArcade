@@ -19,6 +19,7 @@ namespace ConsoleArcade
             public ConsoleColor textColor;
             public ConsoleColor backgroundColor;
             public string filler;
+            public string charge;
         }
 
         public List<Detail> screens = new List<Detail>();
@@ -42,25 +43,27 @@ namespace ConsoleArcade
                 textColor = ConsoleColor.Black,
                 backgroundColor = ConsoleColor.White,
                 filler = "  ",
+                charge = "🍭"
             };
 
             Detail nature = new Detail()
             {
                 foes = new List<string>()
                 {
-                    "🍀", "🌿", "🍃", "🍂", "🌾", "🌱", "🍁", "🌺","🌷","🌸","🌹","🌻","🌼"
+                    "🍀", "🌿", "🍃", "🌾", "🌱", "🌺","🌷","🌸","🌹","🌻","🌼"
                 },
 
                 cursor = "🐿",
                 powerUp = "🦄",
-                explosion = "🟤",
+                explosion = "🍂",
                 projectile = "🥜",
                 name = "Nature? Why Yes!",
                 pwrUpName = "NUTS",
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.DarkGreen,
                 filler = "  ",
-    };
+                charge = " 🦆 "
+            };
 
             Detail universe = new Detail()
             {
@@ -73,12 +76,13 @@ namespace ConsoleArcade
                 powerUp = "⭐️",
                 explosion = "🌟",
                 projectile = "✨",
-                name = "Binary Sunset, How The Time Flies...",
+                name = "Binary Sunset",
                 pwrUpName = "STARZ",
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.Yellow,
                 filler = "⬛️",
-        };
+                charge = "🌠"
+            };
 
 
             Detail alain = new Detail()
@@ -96,6 +100,7 @@ namespace ConsoleArcade
                 backgroundColor = ConsoleColor.Green,
                 textColor = ConsoleColor.Red,
                 filler = "  ",
+                charge = " 🐽 ",
             LaunchSound = new List<string>()
                 {
                     @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax1.wav",
@@ -127,6 +132,7 @@ namespace ConsoleArcade
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.White,
                 filler = " ",
+                charge = "+",
             };
 
             Detail cats = new Detail()
@@ -144,6 +150,7 @@ namespace ConsoleArcade
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.DarkYellow,
                 filler = "  ",
+                charge = " 🐱 ",
             };
 
             screens.AddRange(new List<Detail>() { standard, alain, ascii, cats, nature, universe } );
