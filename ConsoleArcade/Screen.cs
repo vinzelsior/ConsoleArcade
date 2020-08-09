@@ -70,7 +70,21 @@ namespace ConsoleArcade
                 LaunchSound = alain.LaunchSound
             };
 
-            screens.AddRange(new List<Detail>() { standard, alain, ascii } );
+            Detail cats = new Detail()
+            {
+                foes = new List<string>()
+                {
+                    "😼", "😽", "🙀", "😿", "😾", "😸", "😺", "😹"
+                },
+                cursor = "🤷‍♀️",
+                projectile = "🧶",
+                explosion = "😻",
+                powerUp = "📦",
+                name = "Jellicle Cats",
+                pwrUpName = "Yarn"
+            }
+
+            screens.AddRange(new List<Detail>() { standard, alain, ascii, cats } );
         }
 
         // could be used to add custom ones with JSON
