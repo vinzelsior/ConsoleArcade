@@ -61,11 +61,33 @@ namespace ConsoleArcade
             alain.textColor = ConsoleColor.Red;
             alain.LaunchSound = new List<string>()
             {
-                    @"\Users\cedriczwahlen\Documents\GitHub\ConsoleArcade\ConsoleArcade\ConsoleArcade\Sounds\Sax1.wav",
-                    @"\Users\cedriczwahlen\Documents\GitHub\ConsoleArcade\ConsoleArcade\ConsoleArcade\Sounds\Sax2.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax1.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax2.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax3.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax4.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax6.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax7.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax8.wav",
+                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax9.wav",
             };
 
-            screens.AddRange(new List<Detail>() { standard, alain } );
+            Detail ascii = new Detail()
+            {
+                foes = new List<string>()
+                {
+                    "o", "0", "Q", "°", "O", "ö", "Ö"
+                },
+
+                cursor = "^",
+                powerUp = "@",
+                explosion = "X",
+                projectile = "!",
+                name = "Ascii for Windows",
+                pwrUpName = "Crashes",
+                LaunchSound = alain.LaunchSound
+            };
+
+            screens.AddRange(new List<Detail>() { standard, alain, ascii } );
         }
 
         // could be used to add custom ones with JSON
