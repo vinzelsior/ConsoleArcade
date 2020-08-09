@@ -80,7 +80,6 @@ namespace ConsoleArcade
             Screen screen = new Screen();
 
 
-
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("Console Arcade - Project by Cedric Zwahlen");
             Console.WriteLine("------------------------------------------");
@@ -94,7 +93,7 @@ namespace ConsoleArcade
             foreach (Screen.Detail s in screen.screens)
             {
                 Console.WriteLine("");
-                Console.WriteLine($"{cntr} : {s.name} - {s.cursor}");
+                Console.WriteLine($"{cntr}: {s.name} - {s.cursor}");
                 cntr++;
             }
 
@@ -278,7 +277,7 @@ namespace ConsoleArcade
 
                     ammo -= 1;
 
-                    Missile missile = new Missile(cursor.row - 1, cursor.column, "⚡️", new TimeSpan(1_000_000));
+                    Missile missile = new Missile(cursor.row - 1, cursor.column, currentDetail.projectile, new TimeSpan(1_000_000));
                     movableObjects.Add(missile);
                     missile.Launch();
 

@@ -44,8 +44,8 @@ namespace ConsoleArcade
             alain.pwrUpName = "Saxmimum Power";
             alain.LaunchSound = new List<string>()
             {
-                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax1.wav",
-                    @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax2.wav",
+                    @"\Users\cedriczwahlen\Documents\GitHub\ConsoleArcade\ConsoleArcade\ConsoleArcade\Sounds\Sax1.wav",
+                    @"\Users\cedriczwahlen\Documents\GitHub\ConsoleArcade\ConsoleArcade\ConsoleArcade\Sounds\Sax2.wav",
             };
 
             screens.AddRange(new List<Detail>() { standard, alain } );
