@@ -21,7 +21,7 @@ namespace ConsoleArcade
 
         private static bool speedModUpdated = false; 
 
-        private static List<string> symbols = Program.currentDetail.foes;
+        public static List<string> symbols = Program.currentDetail.foes;
 
 
         public static void SpawnAutomatically(List<MovableObject> into)
@@ -51,7 +51,7 @@ namespace ConsoleArcade
                 }
 
                 // spawn rare
-                if (rand.Next(0, 40) == 1)
+                if (rand.Next(0, 10) == 1)
                 {
                     // haha lol
                     into.Add(spawnTreat());
@@ -78,8 +78,7 @@ namespace ConsoleArcade
 
         private static MovableObject spawnThreat()
         {
-
-            MovableObject threat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), symbols[rand.Next(symbols.Count)], new TimeSpan(3_500_000 - (speedModifier * 300_000)));
+            MovableObject threat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), symbols[rand.Next(symbols.Count)], new TimeSpan(3_500_000 - (speedModifier * 1_000_000)));
 
             threat.directionRow = 1;
 
@@ -88,13 +87,21 @@ namespace ConsoleArcade
 
         private static MovableObject spawnTreat()
         {
-
-            MovableObject treat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), Program.currentDetail.powerUp, new TimeSpan(3_500_000 - (speedModifier * 300_000)));
+            MovableObject treat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), Program.currentDetail.powerUp, new TimeSpan(3_500_000 - (speedModifier * 400_000)));
 
             treat.directionRow = 1;
             treat.isTreat = true;
 
             return treat;
+        }
+
+        public static void reset()
+        {
+            downTimeModifier = 0;
+            speedModifier = 0;
+
+            totalSpawned = 0;
+            difficulty = 0;
         }
     }
 }

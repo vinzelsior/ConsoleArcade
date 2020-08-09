@@ -4,23 +4,38 @@ using System.IO;
 using System.Media;
 using System.Threading;
 
+/* 
+ * This is the ConsoleArcade, the worst game made in just about a day.
+ * On windows, it can make sounds, but can't display emojies, but will flicker like theres no tomorrow.
+ * On Mac, it works pretty well, apart from the lacking sound.
+ * 
+ * Today's Motto:
+ * 
+ * WHO NEEDS COMMENTS?
+ * Bonus: WE LOVE STATIC FIELDS!
+ */
+
+
 namespace ConsoleArcade
 {
     class Program
     {
+        // row = line
         public static int maxRows = 10;
+        // the spaces
         public static int maxColumns = 20;
 
         public static int score = 0;
-        public static int ammo = 20;
+        public static int ammo = 10;
 
         public static Screen.Detail currentDetail;
+        public static string filler;
 
         static void DrawSeveralInLine(List<MovableObject> objects, List<VanityObject> vanities)
         {
 
             string newLine = "";
-
+           
             for (int i = 0; i < maxColumns; i++)
             {
                 MovableObject obj = objects.Find(o => o.column == i);
@@ -39,7 +54,7 @@ namespace ConsoleArcade
                 }
                 else
                 {
-                    newLine += " ";
+                    newLine += filler;
                 }
             }
 
@@ -54,7 +69,7 @@ namespace ConsoleArcade
 
             string buffer = "";
 
-            for (int i = 0; i < maxColumns; i++)
+            for (int i = 0; i < maxColumns * filler.Length; i++)
             {
                 buffer += "_";
             }
@@ -77,6 +92,9 @@ namespace ConsoleArcade
 
         static void Main(string[] args)
         {
+
+            start:
+
             Screen screen = new Screen();
 
 
@@ -84,9 +102,9 @@ namespace ConsoleArcade
             Console.WriteLine("Console Arcade - Project by Cedric Zwahlen");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("");
-            Console.WriteLine("Press '⌘+⇧+1' to resize the window.");
+            Console.WriteLine("Press '⌘+⇧+1' to Resize the Window.");
             Console.WriteLine("");
-            Console.WriteLine("Please Choose a screen");
+            Console.WriteLine("Please Choose a Look by Pressing the Associated Number.");
 
             int cntr = 0;
 
@@ -112,13 +130,13 @@ namespace ConsoleArcade
             Console.BackgroundColor = currentDetail.backgroundColor;
             Console.ForegroundColor = currentDetail.textColor;
 
-
+            Spawner.symbols = currentDetail.foes;
+            filler = currentDetail.filler;
             
 
             Console.Clear();
 
             // One million ticks = 1 sec / ticks not used in cursor
-
             MovableObject cursor = new MovableObject(maxRows, maxRows / 2, currentDetail.cursor, new TimeSpan(50_000_000));
 
             cursor.lastUpdate = DateTime.Now;
@@ -132,7 +150,6 @@ namespace ConsoleArcade
             
             do
             {
-
                 // updates the game
 
                 while (Console.KeyAvailable == false && gameOver == false)
@@ -142,18 +159,18 @@ namespace ConsoleArcade
 
                     Console.Clear();
 
-                    // updates the position of the objects
-                    foreach (MovableObject obj in movableObjects)
+                    // updates the position of missiles first
+                    List<MovableObject> mssls = movableObjects.FindAll(m => m is Missile);
+
+                    foreach (MovableObject obj in mssls)
                     {
 
                         if (DateTime.Now > obj.lastUpdate + obj.updateInterval)
                         {
-
                             obj.lastUpdate = DateTime.Now;
 
                             obj.column = obj.column + obj.directionColumn;
                             obj.row = obj.row + obj.directionRow;
-
                         }
                     }
 
@@ -164,8 +181,6 @@ namespace ConsoleArcade
                             obj.remove = true;
                         }
                     }
-
-
 
 
                     // mark objects to be removed
@@ -196,7 +211,7 @@ namespace ConsoleArcade
                             }
                         }
 
-                            MovableObject mvblObj = movableObjects.Find(o => o.column == movableObjects[i].column && o.row == movableObjects[i].row);
+                        MovableObject mvblObj = movableObjects.Find(o => o.column == movableObjects[i].column && o.row == movableObjects[i].row);
 
                         if (mvblObj != movableObjects[i] && mvblObj != null)
                         {
@@ -209,7 +224,6 @@ namespace ConsoleArcade
                     }
 
                     // remove all marked items
-
                     List<MovableObject> ToRemoveMov = movableObjects.FindAll(m => m.remove == true);
 
                     foreach (MovableObject obj in ToRemoveMov)
@@ -222,6 +236,30 @@ namespace ConsoleArcade
                     foreach (VanityObject obj in ToRemoveVan)
                     {
                         vanityObjects.Remove(obj);
+                    }
+
+
+                    foreach (VanityObject obj in vanityObjects)
+                    {
+                        if (DateTime.Now > obj.spawnedAt + obj.lifeTime)
+                        {
+                            obj.remove = true;
+                        }
+                    }
+
+                    // updates the position of non-missiles after
+                    List<MovableObject> nonmssls = movableObjects.FindAll(m => !(m is Missile));
+
+                    foreach (MovableObject obj in nonmssls)
+                    {
+                        if (DateTime.Now > obj.lastUpdate + obj.updateInterval)
+                        {
+
+                            obj.lastUpdate = DateTime.Now;
+
+                            obj.column = obj.column + obj.directionColumn;
+                            obj.row = obj.row + obj.directionRow;
+                        }
                     }
 
                     DrawAmmo();
@@ -241,14 +279,11 @@ namespace ConsoleArcade
                         }
                         
                         DrawSeveralInLine(objectsInLine, vanitiesInLine);
-                        
-
-                     
                     }
 
                     DrawScore();
 
-                    Thread.Sleep(50);
+                    Thread.Sleep(10);
                 }
 
 
@@ -257,7 +292,6 @@ namespace ConsoleArcade
 
 
                 // reacts to user input
-
                 key = Console.ReadKey().Key;
 
 
@@ -284,15 +318,21 @@ namespace ConsoleArcade
                     missile.Launch();
 
                 }
-
-                
-
             } while (key != ConsoleKey.Escape);
 
             Console.Clear();
 
-            Console.WriteLine("Game Over!");
+            Console.WriteLine();
+            Console.WriteLine($"Game Over! - Your Score: {score}");
+            Console.WriteLine();
 
+            Console.ReadKey();
+
+            Spawner.reset();
+
+            movableObjects = new List<MovableObject>();
+
+            goto start;
         }
     }
 }

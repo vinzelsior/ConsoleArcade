@@ -18,6 +18,7 @@ namespace ConsoleArcade
             public List<string> LaunchSound;
             public ConsoleColor textColor;
             public ConsoleColor backgroundColor;
+            public string filler;
         }
 
         public List<Detail> screens = new List<Detail>();
@@ -25,17 +26,23 @@ namespace ConsoleArcade
         public Screen()
         {
 
-            Detail standard = new Detail();
-            standard.foes = new List<string>()
-            {"🍎","🥑","🍅","🥕","🍏","🍍","🍇","🍓"};
-            standard.cursor = "🍤";
-            standard.explosion = "💥";
-            standard.powerUp = "🧿";
-            standard.projectile = "⚡️";
-            standard.name = "Standard";
-            standard.pwrUpName = "Nazaars Wisdom";
-            standard.textColor = ConsoleColor.Black;
-            standard.backgroundColor = ConsoleColor.White;
+            Detail standard = new Detail()
+            {
+                foes = new List<string>()
+                {
+                    "🍎", "🥑", "🍅", "🥕", "🍏", "🍍", "🍇", "🍓"
+                },
+
+                cursor = "🍤",
+                explosion = "💥",
+                powerUp = "🧿",
+                projectile = "⚡️",
+                name = "Shrimp!",
+                pwrUpName = "Nazaars Wisdom",
+                textColor = ConsoleColor.Black,
+                backgroundColor = ConsoleColor.White,
+                filler = "  ",
+            };
 
             Detail nature = new Detail()
             {
@@ -52,7 +59,8 @@ namespace ConsoleArcade
                 pwrUpName = "NUTS",
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.DarkGreen,
-            };
+                filler = "  ",
+    };
 
             Detail universe = new Detail()
             {
@@ -69,22 +77,27 @@ namespace ConsoleArcade
                 pwrUpName = "STARZ",
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.Yellow,
-            };
+                filler = "⬛️",
+        };
 
 
-            Detail alain = new Detail();
-            alain.foes = new List<string>()
-            {"🍅","🌽","🐄","🐖","🐂","🐓","👩‍🌾","👨‍🌾","🤖"};
-            alain.cursor = "🛸";
-            alain.powerUp = "🎷";
-            alain.explosion = "💖";
-            alain.projectile = "🎶";
-            alain.name = "Alain's Special Remix";
-            alain.pwrUpName = "Saxmimum Power";
-            alain.backgroundColor = ConsoleColor.Green;
-            alain.textColor = ConsoleColor.Red;
-            alain.LaunchSound = new List<string>()
+            Detail alain = new Detail()
             {
+                foes = new List<string>()
+                {
+                    "🍅","🌽","🐄","🐖","🐂","🐓","👩‍🌾","👨‍🌾","🤖"
+                },
+                cursor = "🛸",
+                powerUp = "🎷",
+                explosion = "💖",
+                projectile = "🎶",
+                name = "Alain's Special Remix",
+                pwrUpName = "Saxmimum Power",
+                backgroundColor = ConsoleColor.Green,
+                textColor = ConsoleColor.Red,
+                filler = "  ",
+            LaunchSound = new List<string>()
+                {
                     @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax1.wav",
                     @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax2.wav",
                     @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax3.wav",
@@ -93,7 +106,9 @@ namespace ConsoleArcade
                     @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax7.wav",
                     @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax8.wav",
                     @"C:\Users\alain\Documents\GitHub\Nerovia\ConsoleArcade\ConsoleArcade\Sounds\Sax9.wav",
+                },
             };
+            
 
             Detail ascii = new Detail()
             {
@@ -111,6 +126,7 @@ namespace ConsoleArcade
                 LaunchSound = alain.LaunchSound,
                 backgroundColor = ConsoleColor.Black,
                 textColor = ConsoleColor.White,
+                filler = " ",
             };
 
             Detail cats = new Detail()
@@ -124,10 +140,13 @@ namespace ConsoleArcade
                 explosion = "😻",
                 powerUp = "📦",
                 name = "Jellicle Cats",
-                pwrUpName = "Yarn"
-            }
+                pwrUpName = "Yarn",
+                backgroundColor = ConsoleColor.Black,
+                textColor = ConsoleColor.DarkYellow,
+                filler = "  ",
+            };
 
-            screens.AddRange(new List<Detail>() { standard, alain, ascii, cats } );
+            screens.AddRange(new List<Detail>() { standard, alain, ascii, cats, nature, universe } );
         }
 
         // could be used to add custom ones with JSON
