@@ -160,16 +160,21 @@ namespace ConsoleArcade
             Console.WriteLine();
             Console.WriteLine("Controls:\n - Move with ← →\n - Shoot with Spacebar\n - Charge Vince's Grace with ↑, and release it V");
 
-            ConsoleKey key = Console.ReadKey(true).Key;
+            ConsoleKey key;
 
-            try {
-
-                int index = int.Parse(key.ToString().Replace("D", ""));
-
-                currentDetail = screen.screens[index];
-            } catch 
+            while (true)
             {
-                currentDetail = screen.screens[0];
+                key = Console.ReadKey(true).Key;
+
+                int number;
+                if (int.TryParse(key.ToString().Remove(0, 1), out number))
+                {
+                    if (number < screen.screens.Count)
+                    {
+                        currentDetail = screen.screens[number];
+                        break;
+                    }
+                }
             }
 
             Console.BackgroundColor = currentDetail.backgroundColor;
@@ -210,7 +215,7 @@ namespace ConsoleArcade
 
                 while (Console.KeyAvailable == false && gameOver == false)
                 {
-                    Spawner.SpawnAutomatically(movableObjects);
+                    Spawner.SpawnAutomatically(baseGameObjects);
                     
                     Console.SetCursorPosition(0, 0);
 
