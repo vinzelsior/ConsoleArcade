@@ -126,6 +126,7 @@ namespace ConsoleArcade
 
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
 
         // from goto
         start:
@@ -176,7 +177,7 @@ namespace ConsoleArcade
 
             Spawner.symbols = currentDetail.foes;
             filler = currentDetail.filler;
-            
+
 
             Console.Clear();
 
@@ -209,9 +210,9 @@ namespace ConsoleArcade
 
                 while (Console.KeyAvailable == false && gameOver == false)
                 {
-                    Spawner.SpawnAutomatically(baseGameObjects);
-
-                    Console.Clear();
+                    Spawner.SpawnAutomatically(movableObjects);
+                    
+                    Console.SetCursorPosition(0, 0);
 
                     // updates the position of gamecontent
                     //List<BaseGameObject> mssls = ;
@@ -360,7 +361,7 @@ namespace ConsoleArcade
 
 
                 // reacts to user input
-                key = Console.ReadKey().Key;
+                key = Console.ReadKey(true).Key;
 
                 if (key == ConsoleKey.UpArrow)
                 {
@@ -446,7 +447,6 @@ namespace ConsoleArcade
                 }
 
 
-
             } while (key != ConsoleKey.Escape);
 
             Console.Clear();
@@ -455,7 +455,7 @@ namespace ConsoleArcade
             Console.WriteLine($"Game Over! - Your Score: {score}");
             Console.WriteLine();
 
-            Console.ReadKey();
+            Console.ReadKey(true);
 
             Spawner.Reset();
 
