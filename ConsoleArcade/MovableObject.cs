@@ -5,7 +5,7 @@ using System.Media;
 
 namespace ConsoleArcade
 {
-    public class MovableObject
+    public class BaseGameObject
     {
 
         public int row;
@@ -14,18 +14,21 @@ namespace ConsoleArcade
 
         public bool remove = false;
 
-        public bool isTreat = false;
-
         public TimeSpan updateInterval;
         public DateTime lastUpdate;
+
+        public TimeSpan lifeTime;
+        public DateTime spawnedAt;
 
         public int directionRow = 0;
         public int directionColumn = 0;
 
-        public MovableObject(int row, int column, string symbol, TimeSpan updateInterval)
+        public BaseGameObject(int row, int column, string symbol, int updateInterval, int lifeTime = 0)
         {
             this.lastUpdate = DateTime.Now;
-            this.updateInterval = updateInterval;
+            this.spawnedAt = DateTime.Now;
+            this.updateInterval = new TimeSpan(updateInterval);
+            this.lifeTime = new TimeSpan(lifeTime);
             this.row = row;
             this.column = column;
             this.symbol = symbol;
@@ -33,12 +36,40 @@ namespace ConsoleArcade
         }
     }
 
-   
+    public class Vanity : BaseGameObject
+    {
+        public Vanity(int row, int column, string symbol, int lifeTime, int updateInterval = 0) : base(row, column, symbol, updateInterval, lifeTime)
+        {
 
-    public class Missile : MovableObject
+
+
+        }
+    }
+
+    public class Threat : BaseGameObject
+    {
+        public Threat(int row, int column, string symbol, int updateInterval, int lifeTime = 0) : base(row, column, symbol, updateInterval, lifeTime)
+        {
+
+            
+
+        }
+    }
+
+    public class PowerUp : BaseGameObject
+    {
+        public PowerUp(int row, int column, string symbol, int updateInterval, int lifeTime = 0) : base(row, column, symbol, updateInterval, lifeTime)
+        {
+
+
+
+        }
+    }
+
+    public class Missile : BaseGameObject
     {
 
-        public Missile(int row, int column, string symbol, TimeSpan updateInterval) : base(row, column, symbol, updateInterval)
+        public Missile(int row, int column, string symbol, int updateInterval, int lifeTime = 0) : base(row, column, symbol, updateInterval, lifeTime)
         {
         }
 

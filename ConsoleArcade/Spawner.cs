@@ -17,7 +17,7 @@ namespace ConsoleArcade
 
         public static List<string> symbols = Program.currentDetail.foes;
 
-        public static void SpawnAutomatically(List<MovableObject> into)
+        public static void SpawnAutomatically(List<BaseGameObject> into)
         {
             if (DateTime.Now > lastSpawn + downTime)
             {
@@ -35,12 +35,12 @@ namespace ConsoleArcade
                     if (rand.Next(0, 20) == 1)
                     {
                         // haha lol
-                        into.Add(spawnTreat());
+                        into.Add(SpawnPowerUp());
                     }
                     else
                     {
                         // easy to confuse
-                        into.Add(spawnThreat());
+                        into.Add(SpawnThreat());
                     }
                 }
 
@@ -52,26 +52,27 @@ namespace ConsoleArcade
             }
         }
 
-        private static MovableObject spawnThreat()
+        private static BaseGameObject SpawnThreat()
         {
-            MovableObject threat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), symbols[rand.Next(symbols.Count)], new TimeSpan(3_500_000 - (level * 200_000)));
-
-            threat.directionRow = 1;
+            BaseGameObject threat = new Threat(0, rand.Next(0, Program.maxColumns - 1), symbols[rand.Next(symbols.Count)], 3_500_000 - (level * 300_000))
+            {
+                directionRow = 1
+            };
 
             return threat;
         }
 
-        private static MovableObject spawnTreat()
+        private static BaseGameObject SpawnPowerUp()
         {
-            MovableObject treat = new MovableObject(0, rand.Next(0, Program.maxColumns - 1), Program.currentDetail.powerUp, new TimeSpan(3_500_000 - (level * 200_000)));
+            BaseGameObject powerUp = new PowerUp(0, rand.Next(0, Program.maxColumns - 1), Program.currentDetail.powerUp, 3_500_000 - (level * 300_000))
+            {
+                directionRow = 1
+            };
 
-            treat.directionRow = 1;
-            treat.isTreat = true;
-
-            return treat;
+            return powerUp;
         }
 
-        public static void reset()
+        public static void Reset()
         {
             
             level = 1;
