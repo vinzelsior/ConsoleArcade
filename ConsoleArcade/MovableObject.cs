@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Media;
-
+using System.Threading;
 
 namespace ConsoleArcade
 {
@@ -32,6 +32,19 @@ namespace ConsoleArcade
             this.row = row;
             this.column = column;
             this.symbol = symbol;
+
+        }
+    }
+
+    public class Cursor : BaseGameObject
+    {
+
+        public int ammo;
+
+        public Cursor(int row, int column, string symbol, int updateInterval, int ammo, int lifeTime = 0) : base(row, column, symbol, updateInterval, lifeTime)
+        {
+            this.ammo = ammo;
+
 
         }
     }
@@ -82,14 +95,16 @@ namespace ConsoleArcade
             {
                 try
                 {
-
+                    
                     using (SoundPlayer saxPlayer = new SoundPlayer(Program.currentDetail.LaunchSound.PickRandom()))
                     {
                         saxPlayer?.Play();
                     }
+
+
                 }
                 catch { }
-                
+                    
             }
         }
     }

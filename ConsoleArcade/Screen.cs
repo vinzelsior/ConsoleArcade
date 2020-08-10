@@ -152,7 +152,7 @@ namespace ConsoleArcade
                 filler = "  ",
                 charge = " 🐱 ",
             };
-
+            
             Detail shapes = new Detail()
             {
                 foes = new List<string>()
@@ -170,7 +170,7 @@ namespace ConsoleArcade
                 filler = "  ",
                 charge = " 🔷 ",
             };
-
+            
             screens.AddRange(new List<Detail>() { standard, alain, ascii, cats, nature, universe, shapes } );
         }
 

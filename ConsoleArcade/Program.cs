@@ -26,7 +26,6 @@ namespace ConsoleArcade
         public static int maxColumns = 30;
 
         public static int score = 0;
-        public static int ammo = 5;
 
         public static Screen.Detail currentDetail;
         public static string filler;
@@ -35,6 +34,7 @@ namespace ConsoleArcade
         public static int maxCharges = maxColumns;
         public static int maxChargeTime = 4_500_000;
 
+        // draws the passed objects into a row 
         static void DrawSeveralInLine(List<BaseGameObject> objects)
         {
 
@@ -57,6 +57,7 @@ namespace ConsoleArcade
             Console.WriteLine(newLine);
         }
 
+        // Creates vanity objects and displays them in the middle of the screen for the duration.
         static List<Vanity> GenerateVanitiesFromString(string text)
         {
 
@@ -76,13 +77,18 @@ namespace ConsoleArcade
 
             return vs;
         }
-
+        // draws the score of the player 
         static void DrawScore()
         {
 
             string scr = $"Score: {score}\t\tLevel: {Spawner.level}";
 
             string buffer = "";
+
+            for (int i = 0; i < maxColumns - scr.Length; i++)
+            {
+                scr += " ";
+            }
 
             for (int i = 0; i < maxColumns * filler.Length; i++)
             {
@@ -96,10 +102,16 @@ namespace ConsoleArcade
             Console.WriteLine(scr);
         }
 
-        static void DrawAmmo()
+        // draws the ammunition available to the player
+        static void DrawAmmo(int amount)
         {
 
-            string amm = $"{currentDetail.pwrUpName}: {ammo}";
+            string amm = $"{currentDetail.pwrUpName}: {amount}";
+
+            for (int i = 0; i < maxColumns - amm.Length; i++)
+            {
+                amm += " ";
+            }
 
             Console.WriteLine(amm);
             Console.WriteLine();
@@ -110,16 +122,24 @@ namespace ConsoleArcade
             string chrg = "";
 
             int incrementMod = chargeIncrements;
+            string filler = " ";
 
             if (currentDetail.charge.Length > 2)
             {
                 incrementMod /= 2;
+                filler = "  ";
             }
             
             for (int i = 0; i < incrementMod; i++)
             {
                 chrg += currentDetail.charge;
             }
+
+            for (int i = 0; i < maxColumns - incrementMod; i++)
+            {
+                chrg += filler;
+            }
+
             Console.WriteLine("");
             Console.WriteLine(chrg);
         }
@@ -182,15 +202,14 @@ namespace ConsoleArcade
             Console.Clear();
 
             // One million ticks = 1 sec / ticks not used in cursor
-            BaseGameObject cursor = new BaseGameObject(maxRows, maxRows / 2, currentDetail.cursor, 50_000_000)
+            Cursor cursor = new Cursor(maxRows, maxRows / 2, currentDetail.cursor, 0,10)
             {
                 lastUpdate = DateTime.Now
             };
 
             List<BaseGameObject> baseGameObjects = new List<BaseGameObject>();
 
-           //List<VanityObject> vanityObjects = new List<VanityObject>();
-
+           
             // could be a statemachine
 
             bool gameOver = false;
@@ -210,15 +229,11 @@ namespace ConsoleArcade
 
                 while (Console.KeyAvailable == false && gameOver == false)
                 {
-                    Spawner.SpawnAutomatically(movableObjects);
+                    Spawner.SpawnAutomatically(baseGameObjects);
                     
                     Console.SetCursorPosition(0, 0);
 
                     // updates the position of gamecontent
-                    //List<BaseGameObject> mssls = ;
-
-                    //List<BaseGameObject> vnts = ;
-
                     foreach (BaseGameObject obj in baseGameObjects)
                     {
                         if (DateTime.Now > obj.lastUpdate + obj.updateInterval)
@@ -229,25 +244,7 @@ namespace ConsoleArcade
                             obj.row += obj.directionRow;
                         }
                     }
-                    /*
-                    foreach (Missile obj in baseGameObjects.FindAll(m => m is Missile))
-                    {
-
-                        if (DateTime.Now > obj.lastUpdate + obj.updateInterval)
-                        {
-                            obj.lastUpdate = DateTime.Now;
-
-                            obj.column = obj.column + obj.directionColumn;
-                            obj.row = obj.row + obj.directionRow;
-                        }
-                    }
                     
-                    foreach (Vanity obj in baseGameObjects.FindAll(m => m is Vanity))
-                    {
-                        
-                    }
-                    */
-
                     // mark objects to be removed
                     for (int i = 0; i < baseGameObjects.Count; i++)
                     {
@@ -269,19 +266,18 @@ namespace ConsoleArcade
                         }
 
                         // check if a collision with the cursor occurred
-
                         BaseGameObject collisionWithCursor = baseGameObjects.Find(o => o.column == cursor.column && o.row == cursor.row);
 
-                        
                         if (collisionWithCursor != null)
                         {
-
+                            // if the cursor collides with a powerup
                             if (collisionWithCursor is PowerUp)
                             {
-                                ammo += 5;
+                                cursor.ammo += 5;
                                 collisionWithCursor.remove = true;
                                 break;
                             }
+                            // game over
                             else
                             {
                                 gameOver = true;
@@ -289,8 +285,7 @@ namespace ConsoleArcade
                             }
                         }
 
-                        // check if a collision with two different objects occurred
-
+                        // check if a collision with two different objects occurred (we need to ignore vanity objects, because these should not cause a collision)
                         BaseGameObject mvblObj = baseGameObjects.Find(o => o.column == baseGameObjects[i].column && o.row == baseGameObjects[i].row && !(o is Vanity));
 
                         if (mvblObj != baseGameObjects[i] && mvblObj != null && !(baseGameObjects[i] is Vanity))
@@ -310,31 +305,12 @@ namespace ConsoleArcade
                     }
 
                     // remove all marked items
-                    //List<BaseGameObject> ToRemoveMov = ;
-
                     foreach (BaseGameObject obj in baseGameObjects.FindAll(m => m.remove == true))
                     {
                         baseGameObjects.Remove(obj);
                     }
 
-                    
-                    /*
-                    // updates the position of non-missiles after
-                    List<BaseGameObject> nonmssls = baseGameObjects.FindAll(m => !(m is Missile));
-
-                    foreach (BaseGameObject obj in nonmssls)
-                    {
-                        if (DateTime.Now > obj.lastUpdate + obj.updateInterval)
-                        {
-
-                            obj.lastUpdate = DateTime.Now;
-
-                            obj.column = obj.column + obj.directionColumn;
-                            obj.row = obj.row + obj.directionRow;
-                        }
-                    }
-                    */
-                    DrawAmmo();
+                    DrawAmmo(cursor.ammo);
 
                     // draws the lines again
                     for (int i = 0; i <= maxRows; i++)
@@ -352,7 +328,7 @@ namespace ConsoleArcade
                     DrawCharge();
                     DrawScore();
 
-                    Thread.Sleep(10);
+                    Thread.Sleep(5);
                 }
 
 
@@ -404,13 +380,13 @@ namespace ConsoleArcade
                     cursor.column = cursor.column <= 0 ? 0 : cursor.column - 1;
                 }
 
-                if (key == ConsoleKey.Spacebar && ammo > 0)
+                if (key == ConsoleKey.Spacebar && cursor.ammo > 0)
                 {
-                        ammo -= 1;
+                    cursor.ammo -= 1;
 
-                        Missile missile = new Missile(cursor.row - 1, cursor.column, currentDetail.projectile, 1_000_000);
-                        baseGameObjects.Add(missile);
-                        missile.Launch();
+                    Missile missile = new Missile(cursor.row - 1, cursor.column, currentDetail.projectile, 1_000_000);
+                    baseGameObjects.Add(missile);
+                    missile.Launch();
                     
                 }
 
@@ -459,7 +435,6 @@ namespace ConsoleArcade
 
             Spawner.Reset();
 
-            ammo = 5;
             score = 0;
 
             baseGameObjects = new List<BaseGameObject>();
