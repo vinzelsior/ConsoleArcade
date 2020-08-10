@@ -134,6 +134,7 @@ namespace ConsoleArcade
 
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
 
         // from goto
         start:
@@ -165,7 +166,7 @@ namespace ConsoleArcade
                 cntr++;
             }
 
-            ConsoleKey key = Console.ReadKey().Key;
+            ConsoleKey key = Console.ReadKey(true).Key;
 
             try {
 
@@ -182,7 +183,7 @@ namespace ConsoleArcade
 
             Spawner.symbols = currentDetail.foes;
             filler = currentDetail.filler;
-            
+
 
             Console.Clear();
 
@@ -213,8 +214,8 @@ namespace ConsoleArcade
                 while (Console.KeyAvailable == false && gameOver == false)
                 {
                     Spawner.SpawnAutomatically(movableObjects);
-
-                    Console.Clear();
+                    
+                    Console.SetCursorPosition(0, 0);
 
                     // updates the position of missiles first
                     List<MovableObject> mssls = movableObjects.FindAll(m => m is Missile);
@@ -343,7 +344,7 @@ namespace ConsoleArcade
 
 
                 // reacts to user input
-                key = Console.ReadKey().Key;
+                key = Console.ReadKey(true).Key;
 
                 if (key == ConsoleKey.UpArrow)
                 {
@@ -429,7 +430,6 @@ namespace ConsoleArcade
                 }
 
 
-
             } while (key != ConsoleKey.Escape);
 
             Console.Clear();
@@ -438,7 +438,7 @@ namespace ConsoleArcade
             Console.WriteLine($"Game Over! - Your Score: {score}");
             Console.WriteLine();
 
-            Console.ReadKey();
+            Console.ReadKey(true);
 
             Spawner.reset();
 
